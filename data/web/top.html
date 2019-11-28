@@ -1,0 +1,143 @@
+<strong>View different types of top lists</strong><br /><br />
+
+Player top per style<br />
+<select class="style0"></select> <a href="javascript:requestTop(0, $('.style0').val());">View!</a>
+<br /><br />
+
+Race top per style<br />
+<select class="style1"></select> <a href="javascript:requestTop(1, $('.style1').val());">View!</a>
+<br /><br />
+
+Jump top per type<br />
+<select class="type2"></select> <a href="javascript:requestTop(2, $('.type2').val());">View!</a>
+
+<script type="text/javascript">
+function requestTop(type, id) {
+	window.location.hash = "#top!" + type + "!" + id;
+}
+
+var styles = <?Lua::GenerateStyles()?>
+$.each(styles, function(k, v) {
+	$(".style0").append($("<option>", { value: k }).text(v));
+	$(".style1").append($("<option>", { value: k }).text(v));
+});
+
+var types = <?Lua::GenerateJumpTypes()?>
+$.each(types, function(k, v) {
+	$(".type2").append($("<option>", { value: k }).text(v));
+});
+</script>
+<?Check::GlobalCompare(0)?>
+<div class="table-cont">
+	<table class="table-fill" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr>
+				<th class="header"><span>#</span></th>
+				<th class="header"><span>Player</span></th>
+				<th class="header"><span>Points</span></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+
+<script src="assets/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+var data = <?Lua::GetTopByType()?>
+if (data.length == 0) { $(".table-cont").html( "No data found for request" ); }
+$.each(data, function(k, v) {
+	var item = "<tr>";
+	item += "<td>" + (k + 1) + "</td>";
+	item += "<td class=\"resolve\" data-steam=\"" + v[0] + "\"></td>";
+	item += "<td>" + v[1] + "</td>";
+	item += "</tr>";
+	
+	$(".table-fill tbody").append(item);
+});
+
+resolveSteamIds($(".resolve"));
+$(".table-fill").tablesorter();
+</script>
+<?EndCheck?>
+<?Check::GlobalCompare(1)?>
+<div class="table-cont">
+	<table class="table-fill" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr>
+				<th class="header"><span>#</span></th>
+				<th class="header"><span>Player</span></th>
+				<th class="header"><span>Wins</span></th>
+				<th class="header"><span>Streak</span></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+
+<script src="assets/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+var data = <?Lua::GetTopByType()?>
+if (data.length == 0) { $(".table-cont").html( "No data found for request" ); }
+$.each(data, function(k, v) {
+	var item = "<tr>";
+	item += "<td>" + (k + 1) + "</td>";
+	item += "<td class=\"resolve\" data-steam=\"" + v[0] + "\"></td>";
+	item += "<td>" + v[1] + "</td>";
+	item += "<td>" + v[2] + "</td>";
+	item += "</tr>";
+	
+	$(".table-fill tbody").append(item);
+});
+
+resolveSteamIds($(".resolve"));
+$(".table-fill").tablesorter();
+</script>
+<?EndCheck?>
+<?Check::GlobalCompare(2)?>
+<div class="table-cont">
+	<table class="table-fill" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr>
+				<th class="header"><span>#</span></th>
+				<th class="header"><span>Player</span></th>
+				<th class="header"><span>Distance</span></th>
+				<th class="header"><span>Prestrafe</span></th>
+				<th class="header"><span>Strafes</span></th>
+				<th class="header"><span>Sync</span></th>
+				<th class="header"><span>Style</span></th>
+				<th class="header"><span>Date</span></th>
+				<th class="header"><span>Edge</span></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+
+<script src="assets/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+var styles = <?Lua::GenerateStyles()?>
+var data = <?Lua::GetTopByType()?>
+if (data.length == 0) { $(".table-cont").html( "No data found for request" ); }
+$.each(data, function(k, v) {
+	var item = "<tr>";
+	item += "<td>" + (k + 1) + "</td>";
+	item += "<td class=\"resolve\" data-steam=\"" + v[0] + "\"></td>";
+	item += "<td>" + v[1] + "</td>";
+	item += "<td>" + v[3] + "</td>";
+	item += "<td>" + v[5] + "</td>";
+	item += "<td>" + v[4] + "%</td>";
+	item += "<td>" + styles[v[6]] + "</td>";
+	item += "<td>" + v[2] + "</td>";
+	item += "<td>" + (v[7] ? v[7] : "") + "</td>";
+	item += "</tr>";
+	
+	$(".table-fill tbody").append(item);
+});
+
+resolveSteamIds($(".resolve"));
+$(".table-fill").tablesorter();
+</script>
+<?EndCheck?>

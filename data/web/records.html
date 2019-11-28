@@ -1,0 +1,125 @@
+Please enter the map you wish to view records for or view records for the current map!<br />
+<select class="maps"></select> <select class="styles"></select>
+<a href="javascript:loadMapRecords($('.maps').val(), $('.styles').val());">View!</a><br /><br />
+Or <a href="javascript:loadMapRecords($('.maps').val(),0);">view all #1 times for each style</a> on the selected map
+
+<script type="text/javascript">
+function loadMapRecords(map, style) {
+	window.location.hash = "#records!" + map + "!" + style;
+}
+
+var maps = <?Lua::GenerateMaps()?>
+$.each(maps, function(k, v) {
+	$(".maps").append($("<option>", { value: k }).text(k + " (" + v + " pts)"));
+	$(".maps").val("<?Lua::GetMapName()?>");
+});
+
+var styles = <?Lua::GenerateStyles()?>
+$.each(styles, function(k, v) {
+	$(".styles").append($("<option>", { value: k }).text(v));
+});
+</script>
+<?Check::GlobalCount(2)?>
+<div class="table-cont">
+	<table class="table-fill" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr>
+				<th class="header"><span>#</span></th>
+				<th class="header"><span>Player</span></th>
+				<th class="header"><span>Time</span></th>
+				<th class="header"><span>Date</span></th>
+				<th class="header"><span>Steam ID</span></th>
+				<th class="header"><span>Top Speed</span></th>
+				<th class="header"><span>Average Speed</span></th>
+				<th class="header"><span>Jumps</span></th>
+				<th class="header"><span>Strafes</span></th>
+				<th class="header"><span>Sync</span></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+
+<script src="assets/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+var times = <?Lua::GetRecordsObject(2)?>
+if (!times.count || times.count == 0) { $(".table-cont").html( "No data found for request" ); }
+$(".cmap").attr("orig", $(".cmap").html());
+$(".cmap").html("Displaying data for: " + times.map);
+
+function parseTimes(times)
+{
+	var count = times.count, first = times.first, last = times.last, style = times.style, map = times.map;
+	delete times.count; delete times.first; delete times.last; delete times.style; delete times.map;
+
+	$.each(times, function(k, v) {
+		var item = "<tr>";
+		item += "<td>" + k + "</td>";
+		item += "<td class=\"resolve\" data-steam=\"" + v[1] + "\"></td>";
+		item += "<td>" + v[3] + "</td>";
+		item += "<td>" + v[2] + "</td>";
+		item += "<td>" + v[0] + "</td>";
+		
+		var max = 4 + 5;
+		for (var i = 4; i < max; i++)
+		{
+			if (!v[i])
+				v[i] = "";
+			else if (i == max - 1)
+				v[i] += "%";
+			else if (i == 4 + 2 && v[max])
+				v[i] += " (" + v[max] + "%)";
+			
+			item += "<td>" + v[i] + "</td>";
+		}
+		
+		item += "</tr>";
+		
+		$(".table-fill tbody").append(item);
+	});
+	
+	if (count - last > 0)
+	{
+		var link = "javascript:loadMore('" + map + "'," + style + "," + (last + 1) + "," + (last + 25) + ")";
+		if ($(".content").find(".loadlink")[0])
+		{
+			$(".loadlink").attr("href", link);
+			$(".loadlink").html("Load more (" + (count - last) + " remaining)");
+		}
+		else
+			$(".content").append("<br /><a href=\"" + link + "\" class=\"loadlink\">Load more (" + (count - last) + " remaining)</a>");
+	}
+	else
+	{
+		$(".loadlink").remove();
+	}
+	
+	resolveSteamIds($(".resolve"));
+}
+
+function loadMore(m, s, b, t)
+{
+	if ($(".loadlink").html() == "Please wait!")
+		return;
+	
+	$(".loadlink").html("Please wait!");
+	
+	var server = getParameterByName("server");
+	if (requestUri[server])
+	{
+		performRequest(server, "records!" + m + "!" + s + "!" + b + "!" + t, function(data){
+			var times = JSON.parse(data.substring(0, data.length - 2));
+			parseTimes(times);
+			$(".table-fill").trigger("update",[true]);
+		});
+	}
+}
+
+parseTimes(times);
+$(".table-fill").tablesorter();
+</script>
+<?EndCheck?>
+<?Check::GlobalCount(4)?>
+<?Lua::GetRecordsObject(1)?>
+<?EndCheck?>

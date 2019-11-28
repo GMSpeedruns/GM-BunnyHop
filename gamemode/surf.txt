@@ -1,0 +1,20 @@
+"Gamemode"
+{
+	"base"		"base"
+	"title"			"Surf"
+	"maps"		"^surf_"
+	"menusystem"	"1"
+	"workshopid"	""
+
+	"settings"
+	{
+		1
+		{
+			"name"		"surf"
+			"version"		"8.50"
+			"help"			"Surf"
+			"type"			"numeric"
+			"default"		"1"
+		}
+	}
+}

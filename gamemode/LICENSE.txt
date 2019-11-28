@@ -1,0 +1,15 @@
+    Subject: Skill Movement Gamemode, Version 8
+    Author and maintainer: Gravious, April 2016
+
+    License Agreement:
+
+    This gamemode is distributed trusting in the fact that it will be kept
+    and used solely by you, the receiver in question.
+
+    You are not allowed to redistribute the gamemode without written
+    permission of the author. Modifications can be made freely and are
+    encouraged by the author to show a level of enthousiasm.
+
+    This gamemode is distributed in the hope that it will be useful,
+    but without any warranty; without even the implied warranty of
+    merchantability or fitness for a particular purpose.

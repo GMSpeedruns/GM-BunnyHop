@@ -1,0 +1,39 @@
+<div class="table-cont">
+	<table class="table-fill" cellspacing="0" cellpadding="0">
+		<thead>
+			<tr>
+				<th class="header"><span>Player</span></th>
+				<th class="header"><span>Style</span></th>
+				<th class="header"><span>Record</span></th>
+				<th class="header"><span>Time</span></th>
+				<th class="header"><span>Rank</span></th>
+				<th class="header"><span>Connection</span></th>
+				<th class="header"><span>Access</span></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+
+<script src="assets/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+var styles = <?Lua::GenerateStyles()?>
+var data = <?Lua::GetPlayers()?>
+$.each(data, function(k, v) {
+	var item = "<tr>";
+	item += "<td class=\"resolve\" data-steam=\"" + v[0] + "\"></td>";
+	item += "<td>" + v[1] + "</td>";
+	item += "<td>" + v[2] + "</td>";
+	item += "<td>" + v[3] + "</td>";
+	item += "<td><span style=\"color: #" + v[5] + ";\">" + v[4] + "</span></td>";
+	item += "<td>" + v[7] + "</td>";
+	item += "<td>" + v[6] + "</td>";
+	item += "</tr>";
+	
+	$(".table-fill tbody").append(item);
+});
+
+resolveSteamIds($(".resolve"));
+$(".table-fill").tablesorter();
+</script>

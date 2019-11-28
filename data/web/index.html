@@ -1,0 +1,12 @@
+<h2 class="title" onclick="navigateBack();"><?Lua::GetServerName()?></h2>
+<div class="subtitle"><center><span class="cmap">Current Map: <?Lua::GetMapName()?></span></center></div>
+
+<center class="holder">
+	<div class="content">
+		<?Lua::IncludeFile("home")?>
+	</div>
+	
+	<div class="footer">
+		<a href="javascript:navigateBack();">Go back</a>
+	</div>
+</center>

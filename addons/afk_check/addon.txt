@@ -1,0 +1,9 @@
+"AddonInfo"
+{
+        "name"              "AFKCheck"
+        "version"           "1.0"
+        "author_name"       "Gravious"
+        "author_email"      "Prestige Gaming"
+        "info"              "Checks for AFKs and kicks them"
+        "override"          "0"
+}
