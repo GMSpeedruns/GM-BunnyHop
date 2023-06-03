@@ -84,25 +84,33 @@ function SWEP:PrimaryAttack()
 		self.Weapon:EmitSound( self.Primary.Sound, 1 )
 	end
 
-	self:CSShootBullet( self.Primary.Damage, self.Primary.Recoil, self.Primary.NumShots, self.Primary.Cone )
+	self:CSShootBullet(self.Primary.Damage, self.Primary.Recoil, self.Primary.NumShots, self.Primary.Cone, dmg)
 	self:TakePrimaryAmmo( 1 )
 end
 
-function SWEP.BulletCallbackFunc( a, b, c )
-	if not SERVER or not b.HitPos then return end
+function SWEP.BulletCallbackFunc(attacker, tr, dmginfo)
+	if not SERVER or not tr.HitPos then return end
 	local tracedata = {}
-	tracedata.start = b.StartPos
-	tracedata.endpos = b.HitPos + (b.Normal * 2)
-	tracedata.filter = a
+	tracedata.start = tr.StartPos
+	tracedata.endpos = tr.HitPos + (tr.Normal * 2)
+	tracedata.filter = attacker
 	tracedata.mask = MASK_PLAYERSOLID
-	
-	local trace = util.TraceLine( tracedata )
-	if IsValid( trace.Entity ) then
+
+	local trace = util.TraceLine(tracedata)
+	if IsValid(trace.Entity) then
 		if trace.Entity:GetClass() == "func_button" then
-			trace.Entity:TakeDamage( dmg, a, c:GetInflictor() )
-			trace.Entity:TakeDamage( dmg, a, c:GetInflictor() )
+			local dmg = DamageInfo()
+			dmg:SetDamage(dmginfo:GetDamage())
+			dmg:SetAttacker(attacker)
+			dmg:SetInflictor(dmginfo:GetInflictor())
+			trace.Entity:TakeDamageInfo(dmg)
+			trace.Entity:TakeDamageInfo(dmg)
 		elseif trace.Entity:GetClass() == "func_physbox_multiplayer" then
-			trace.Entity:TakeDamage( dmg, a, c:GetInflictor() )
+			local dmg = DamageInfo()
+			dmg:SetDamage(dmginfo:GetDamage())
+			dmg:SetAttacker(attacker)
+			dmg:SetInflictor(dmginfo:GetInflictor())
+			trace.Entity:TakeDamageInfo(dmg)
 		end
 	end
 end
